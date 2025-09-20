@@ -26,7 +26,6 @@ router.put('/:budgetId',
     BudgetController.updateById)
 router.delete('/:budgetId',BudgetController.deleteById)
 
-// Routes for expenses
 router.get('/:budgetId/expenses/:expenseId', ExpensesController.getById)
 router.post('/:budgetId/expenses', 
     validateExpenseInput,

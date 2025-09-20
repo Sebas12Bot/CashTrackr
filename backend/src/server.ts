@@ -3,6 +3,7 @@ import colors from 'colors'
 import morgan from 'morgan'
 import { db } from './config/db'
 import budgetRouter from './routes/budgetRouter'
+import authRouter from './routes/authRouter'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -24,10 +25,6 @@ app.use(morgan('dev'))
 app.use(express.json())
 
 app.use('/api/budgets', budgetRouter)
-
-const PORT = process.env.PORT || 4000
-app.listen(PORT, () => {
-    console.log(colors.green.bold(`Servidor corriendo en el puerto ${PORT}`))
-})
+app.use('/api/auth', authRouter)
 
 export default app
