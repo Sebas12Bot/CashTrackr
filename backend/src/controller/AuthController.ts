@@ -39,4 +39,23 @@ export class AuthController {
             })
         }
     }
+    
+    static confirmAccount = async (req: Request, res: Response) => {
+        const { token } = req.body
+
+        const user = await User.findOne({ where: { token }})
+
+        if (!user) {
+            return res.status(401).json({
+                message: 'Token inválido',
+                error: error
+            })
+        }
+
+        user.confirmed = true
+        user.token = null
+        await user.save()
+
+        res.status(200).json('Cuenta confirmada con éxito')
+    }
 }
