@@ -24,4 +24,22 @@ export class AuthEmail {
 
         console.log('Email enviado con éxito', email.messageId)
     }   
+
+    static sendPasswordResetToken = async (user: EmailType) => {
+        const email = await transport.sendMail({
+            from: '"CashTrackr" <no-reply@midominio.com>',
+            to: user.email,
+            subject: 'CashTrackr - Reestablecer contraseña',
+            html: `
+                <h1>Hola ${user.name}</h1>
+                <p>Has solicitado reestablecer tu contraseña</p>
+                <p>Utiliza el siguiente código para reestablecer tu contraseña:</p>
+                <p><b>${user.token}</b></p>
+                <p>Si no solicitaste este cambio, puedes ignorar este correo</p>
+                <p>¡Muchas gracias por usar CashTrackr!</p>
+                `,
+        })
+
+        console.log('Email enviado con éxito', email.messageId)
+    }
 }
