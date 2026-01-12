@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from 'express'
 import { param, validationResult } from 'express-validator'
 import Budget from '../models/Budget'
 import { body } from 'express-validator'
+import User from '../models/User'
 
 declare global {
     namespace Express {
@@ -26,7 +27,7 @@ export const  validateBudgetId = async (req: Request, res: Response, next: NextF
 export const  validateBudgetExists = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { budgetId } = req.params
-        const budget = await Budget.findByPk(budgetId)
+        const budget = await Budget.findByPk(budgetId, {include: [User]})
         if (!budget) {
             return res.status(404).json({
                 message: 'No se encontró el presupuesto',
@@ -51,5 +52,15 @@ export const validateBudgetInput = async (req: Request, res: Response, next: Nex
         .isNumeric().withMessage('Cantidad no válida')
         .custom(value => value > 0).withMessage('El presupuesto debe ser mayor a 0')
         .run(req)
+    next()
+}
+
+export function hasAccessToBudget(req: Request, res: Response, next: NextFunction) {
+    
+    if (req.budget.user.id !== req.user.id){
+        const error = new Error('No tienes acceso a ese presupuesto')
+        return res.status(401).json({ message: error.message } )
+    }
+
     next()
 }

@@ -55,7 +55,7 @@ router.post('/reset-password/:token',
         .isLength({min : 6, max : 6})
         .withMessage('El token es obligatorio'),
     body('password')
-        .notEmpty().withMessage('La contraseña es obligatoria'),
+        .isLength({min: 8}).withMessage('La contraseña es muy corta, debe tener al menos 8 caracteres'),
     handleInputErrors,
     AuthController.resetPasswordWithToken
 )
@@ -63,6 +63,24 @@ router.post('/reset-password/:token',
 router.get('/user',
     authenticate,
     AuthController.user
+)
+
+router.post('/update-password',
+    authenticate,
+    body('current_password')
+        .notEmpty().withMessage('La contraseña actual no puede estar vacía'),
+    body('new_password')
+        .isLength({min: 8}).withMessage('La contraseña nueva es muy corta, debe tener al menos 8 caracteres'),
+    handleInputErrors,
+    AuthController.updateCurrentUserPassword
+)
+
+router.post('/check-password',
+    authenticate,
+    body('password')
+        .notEmpty().withMessage('La contraseña actual no puede estar vacía'),
+    handleInputErrors,
+    AuthController.checkPassword
 )
 
 export default router
