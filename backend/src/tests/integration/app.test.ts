@@ -1,6 +1,6 @@
 import request from 'supertest'
 import server from '../../server'
-import { AuthController } from '../../controllers/AuthController'
+import { AuthController } from '../../controller/AuthController'
 import User from '../../models/User'
 import * as authUtils from '../../utils/auth'
 import * as jwtUtils from '../../utils/jwt'
