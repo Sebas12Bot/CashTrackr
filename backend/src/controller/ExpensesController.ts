@@ -10,8 +10,7 @@ export class ExpensesController {
             res.status(201).json('Gasto creado con éxito')
         } catch (error) {
             res.status(500).json({
-                message: 'Error al crear el gasto',
-                error: error,
+                error: 'Hubo un error',
             })
         }
     }

@@ -1,0 +1,44 @@
+FAIL src/tests/unit/controllers/ExpenseController.test.ts
+  ExpensesController.create
+    × should create a new expense (2 ms)
+    × should handle expense creation error
+  ExpensesController.getById
+    √ should return expense with ID 1 (2 ms)
+  ExpensesController.updateById
+    √ should update expense and return a success message (1 ms)
+  ExpensesController.deleteById
+    √ should delete expense and return a success message (1 ms)
+
+  ● ExpensesController.create › should create a new expense
+
+    TypeError: {(intermediate value)(intermediate value)} is not a function
+
+    [0m [90m 23 |[39m             [33m...[39mreq[33m.[39mbody[33m,[39m
+     [90m 24 |[39m             save[33m:[39m jest[33m.[39mfn()[33m.[39mmockResolvedValue([36mtrue[39m)
+    [31m[1m>[22m[39m[90m 25 |[39m         }
+     [90m    |[39m          [31m[1m^[22m[39m
+     [90m 26 |[39m
+     [90m 27 |[39m         [90m// Mock the Expense constructor[39m
+     [90m 28 |[39m         ([33mExpense[39m [36mas[39m unknown [36mas[39m jest[33m.[39m[33mMock[39m)[33m.[39mmockImplementation(() [33m=>[39m mockExpenseInstance)[0m
+
+      at Object.<anonymous> (src/tests/unit/controllers/ExpenseController.test.ts:25:10)
+
+  ● ExpensesController.create › should handle expense creation error
+
+    TypeError: {(intermediate value)(intermediate value)} is not a function
+
+    [0m [90m 50 |[39m             [33m...[39mreq[33m.[39mbody[33m,[39m
+     [90m 51 |[39m             save[33m:[39m jest[33m.[39mfn()[33m.[39mmockRejectedValue([36mnew[39m [33mError[39m([32m'Hubo un error'[39m))
+    [31m[1m>[22m[39m[90m 52 |[39m         }
+     [90m    |[39m          [31m[1m^[22m[39m
+     [90m 53 |[39m
+     [90m 54 |[39m         [90m// Mock the Expense constructor[39m
+     [90m 55 |[39m         ([33mExpense[39m [36mas[39m unknown [36mas[39m jest[33m.[39m[33mMock[39m)[33m.[39mmockImplementation(() [33m=>[39m mockExpenseInstance)[0m
+
+      at Object.<anonymous> (src/tests/unit/controllers/ExpenseController.test.ts:52:10)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 3 passed, 5 total
+Snapshots:   0 total
+Time:        1.407 s, estimated 2 s
+Ran all test suites matching src/tests/unit/controllers/ExpenseController.test.ts.

@@ -4,6 +4,19 @@ import { AuthController } from '../../controller/AuthController'
 import User from '../../models/User'
 import * as authUtils from '../../utils/auth'
 import * as jwtUtils from '../../utils/jwt'
+import { AuthEmail } from '../../emails/AuthEmail'
+
+// Mock AuthEmail to capture the confirmation token
+jest.mock('../../emails/AuthEmail', () => ({
+    AuthEmail: {
+        sendConfirmationEmail: jest.fn((data: { name: string; email: string; token: string }) => {
+            // Store the token in globalThis for use in confirmation tests
+            globalThis.cashTrackrConfirmationToken = data.token
+            return Promise.resolve()
+        }),
+        sendPasswordResetToken: jest.fn(() => Promise.resolve())
+    }
+}))
 
 describe('Authentication - Create Account', () => {
     it('should display validation errors when form is empty', async () => {
@@ -34,7 +47,7 @@ describe('Authentication - Create Account', () => {
         expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('errors')
         expect(response.body.errors).toHaveLength(1)
-        expect(response.body.errors[0].msg).toBe('E-mail no válido')
+        expect(response.body.errors[0].msg).toBe('Correo inválido')
 
         expect(response.status).not.toBe(201)
         expect(response.body.errors).not.toHaveLength(2)
@@ -54,7 +67,7 @@ describe('Authentication - Create Account', () => {
         expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('errors')
         expect(response.body.errors).toHaveLength(1)
-        expect(response.body.errors[0].msg).toBe('El password es muy corto, mínimo 8 caracteres')
+        expect(response.body.errors[0].msg).toBe('La contraseña debe ser mayor a 8 caracteres')
 
         expect(response.status).not.toBe(201)
         expect(response.body.errors).not.toHaveLength(2)
@@ -92,7 +105,7 @@ describe('Authentication - Create Account', () => {
 
         expect(response.status).toBe(409)
         expect(response.body).toHaveProperty('error')
-        expect(response.body.error).toBe('Un usuario con ese email ya esta registrado')
+        expect(response.body.error).toBe('Un usuario con ese correo ya existe')
         expect(response.status).not.toBe(400)
         expect(response.status).not.toBe(201)
         expect(response.body).not.toHaveProperty('errors')
@@ -112,7 +125,7 @@ describe('Authentication - Account Confirmation with Token', () => {
         expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('errors')
         expect(response.body.errors).toHaveLength(1)
-        expect(response.body.errors[0].msg).toBe('Token no válido')
+        expect(response.body.errors[0].msg).toBe('Token inválido')
             
     })
 
@@ -125,7 +138,7 @@ describe('Authentication - Account Confirmation with Token', () => {
         
         expect(response.status).toBe(401)
         expect(response.body).toHaveProperty('error')
-        expect(response.body.error).toBe('Token no válido')
+        expect(response.body.error).toBe('Token inválido')
         expect(response.status).not.toBe(200)
     })
 
@@ -137,7 +150,7 @@ describe('Authentication - Account Confirmation with Token', () => {
                             .send({ token })
         
         expect(response.status).toBe(200)
-        expect(response.body).toEqual("Cuenta confirmada correctamente")
+        expect(response.body).toEqual("Cuenta confirmada con éxito")
         expect(response.status).not.toBe(401)
     })
 
@@ -179,7 +192,7 @@ describe('Authentication - Login', () => {
         expect(response.status).toBe(400)
         expect(response.body).toHaveProperty('errors')
         expect(response.body.errors).toHaveLength(1)
-        expect(response.body.errors[0].msg).toBe('Email no válido')
+        expect(response.body.errors[0].msg).toBe('Correo inválido')
 
         expect(response.body.errors).not.toHaveLength(2)
         expect(loginMock).not.toHaveBeenCalled()
@@ -195,7 +208,7 @@ describe('Authentication - Login', () => {
         
         expect(response.status).toBe(404)
         expect(response.body).toHaveProperty('error')
-        expect(response.body.error).toBe('Usuario no encontrado')
+        expect(response.body.error).toBe('usuario no encontrado')
 
         expect(response.status).not.toBe(200)
     })
@@ -219,7 +232,7 @@ describe('Authentication - Login', () => {
         
         expect(response.status).toBe(403)
         expect(response.body).toHaveProperty('error')
-        expect(response.body.error).toBe('La Cuenta no ha sido confirmada')
+        expect(response.body.error).toBe('La cuenta no ha sido confirmada')
 
         expect(response.status).not.toBe(200)
         expect(response.status).not.toBe(404)
@@ -245,7 +258,7 @@ describe('Authentication - Login', () => {
         
         expect(response.status).toBe(403)
         expect(response.body).toHaveProperty('error')
-        expect(response.body.error).toBe('La Cuenta no ha sido confirmada')
+        expect(response.body.error).toBe('La cuenta no ha sido confirmada')
 
         expect(response.status).not.toBe(200)
         expect(response.status).not.toBe(404)
@@ -271,7 +284,7 @@ describe('Authentication - Login', () => {
         
         expect(response.status).toBe(401)
         expect(response.body).toHaveProperty('error')
-        expect(response.body.error).toBe('Password Incorrecto')
+        expect(response.body.error).toBe('Contraseña incorrecta')
 
         expect(response.status).not.toBe(200)
         expect(response.status).not.toBe(404)
@@ -344,7 +357,7 @@ describe('GET /api/budgets', ()  => {
                             .get('/api/budgets')
 
         expect(response.status).toBe(401)
-        expect(response.body.error).toBe('No Autorizado')
+        expect(response.body.message).toBe('No autorizado')
     })
 
     it('should reject unauthenticated access to budgets without a valid jwt', async () => {
@@ -353,7 +366,7 @@ describe('GET /api/budgets', ()  => {
                             .auth('not_valid', {type:'bearer'})
 
         expect(response.status).toBe(500)
-        expect(response.body.error).toBe('Token no válido')
+        expect(response.body.message).toBe('Error, intenta de nuevo')
     })
 
     it('should allow authenticated access to budgets with a valid jwt', async () => {
@@ -363,7 +376,7 @@ describe('GET /api/budgets', ()  => {
 
         expect(response.body).toHaveLength(0)
         expect(response.status).not.toBe(401)
-        expect(response.body.error).not.toBe('No Autorizado')
+        expect(response.body.message).not.toBe('No autorizado')
     })
 
 
@@ -380,7 +393,7 @@ describe('POST /api/budgets', ()  => {
                             .post('/api/budgets')
 
         expect(response.status).toBe(401)
-        expect(response.body.error).toBe('No Autorizado')
+        expect(response.body.message).toBe('No autorizado')
     })
 
     it('should display validation when the form is submitted with invalid data ', async () => {
@@ -403,7 +416,7 @@ describe('POST /api/budgets', ()  => {
                             })
 
         expect(response.status).toBe(201)
-        expect(response.body).toBe("Presupuesto Creado Correctamente")
+        expect(response.body).toBe("Presupuesto creado con éxito")
         expect(response.status).not.toBe(400)
         expect(response.status).not.toBe(401)
     })
@@ -419,7 +432,7 @@ describe('GET /api/budgets/:id', () => {
                             .get('/api/budgets/1')
 
         expect(response.status).toBe(401)
-        expect(response.body.error).toBe('No Autorizado')
+        expect(response.body.message).toBe('No autorizado')
     })
 
     it('should return 400 bad request when id is not valid', async () => {
@@ -433,7 +446,7 @@ describe('GET /api/budgets/:id', () => {
         expect(response.body.errors).toHaveLength(1)
         expect(response.body.errors[0].msg).toBe('ID no válido')
         expect(response.status).not.toBe(401)
-        expect(response.body.error).not.toBe('No Autorizado')
+        expect(response.body.message).not.toBe('No autorizado')
     })
 
     it('should return 404 not found when a budget doesnt exists', async () => {
@@ -442,7 +455,7 @@ describe('GET /api/budgets/:id', () => {
                             .auth(jwt, {type: 'bearer'})
 
         expect(response.status).toBe(404)
-        expect(response.body.error).toBe('Presupuesto no encontrado')
+        expect(response.body.message).toBe('No se encontró el presupuesto')
         expect(response.status).not.toBe(400)
         expect(response.status).not.toBe(401)
     })
@@ -470,7 +483,7 @@ describe('PUT /api/budgets/:id', () => {
                             .put('/api/budgets/1')
 
         expect(response.status).toBe(401)
-        expect(response.body.error).toBe('No Autorizado')
+        expect(response.body.message).toBe('No autorizado')
     })
 
     it('should display validation errors if the form is empty', async () => {
@@ -494,7 +507,7 @@ describe('PUT /api/budgets/:id', () => {
                             })
 
         expect(response.status).toBe(200)
-        expect(response.body).toBe('Presupuesto actualizado correctamente')
+        expect(response.body).toBe('Presupuesto actualizado con éxito')
     })
 
 })
@@ -509,7 +522,7 @@ describe('DELETE /api/budgets/:id', () => {
                             .delete('/api/budgets/1')
 
         expect(response.status).toBe(401)
-        expect(response.body.error).toBe('No Autorizado')
+        expect(response.body.message).toBe('No autorizado')
     })
 
     it('should return 404 not found when a budget doesnt exists', async () => {
@@ -518,7 +531,7 @@ describe('DELETE /api/budgets/:id', () => {
                             .auth(jwt, {type: 'bearer'})
 
         expect(response.status).toBe(404)
-        expect(response.body.error).toBe('Presupuesto no encontrado')
+        expect(response.body.message).toBe('No se encontró el presupuesto')
     })
 
     it('should delete a budget and return a success message', async () => {
@@ -527,7 +540,7 @@ describe('DELETE /api/budgets/:id', () => {
                             .auth(jwt, {type: 'bearer'})
 
         expect(response.status).toBe(200)
-        expect(response.body).toBe('Presupuesto eliminado')
+        expect(response.body).toBe('Presupuesto eliminado con éxito')
     })
 
 })

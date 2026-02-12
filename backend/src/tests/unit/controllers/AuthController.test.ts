@@ -34,7 +34,7 @@ describe('AuthController.createAccount', () => {
 
         const data = res._getJSONData()
         expect(res.statusCode).toBe(409)
-        expect(data).toHaveProperty('error', 'Un usuario con ese email ya esta registrado')
+        expect(data).toHaveProperty('error', 'Un usuario con ese correo ya existe')
         expect(User.findOne).toHaveBeenCalled()
         expect(User.findOne).toHaveBeenCalledTimes(1)
     })
@@ -50,20 +50,25 @@ describe('AuthController.createAccount', () => {
             }
         })
         const res = createResponse()
-        const mockUser = { ...req.body, save: jest.fn() };
+        const mockUserInstance = {
+            ...req.body,
+            save: jest.fn().mockResolvedValue(true)
+        };
 
-        (User.create as jest.Mock).mockResolvedValue(mockUser);
+        // Mock the User constructor
+        (User as unknown as jest.Mock).mockImplementation(() => mockUserInstance);
+        
         (hashPassword as jest.Mock).mockReturnValue('hashedpassword');
         (generateToken as jest.Mock).mockReturnValue('123456');
         jest.spyOn(AuthEmail, "sendConfirmationEmail").mockImplementation(() => Promise.resolve());
 
         await AuthController.createAccount(req, res)
 
-        expect(User.create).toHaveBeenCalledWith(req.body)
-        expect(User.create).toHaveBeenCalledTimes(1)
-        expect(mockUser.save).toHaveBeenCalled()
-        expect(mockUser.password).toBe('hashedpassword')
-        expect(mockUser.token).toBe('123456')
+        expect(User).toHaveBeenCalledWith(req.body)
+        expect(User).toHaveBeenCalledTimes(1)
+        expect(mockUserInstance.save).toHaveBeenCalled()
+        expect(mockUserInstance.password).toBe('hashedpassword')
+        expect(mockUserInstance.token).toBe('123456')
         expect(AuthEmail.sendConfirmationEmail).toHaveBeenCalledWith({
             name: req.body.name,
             email: req.body.email,
@@ -92,7 +97,7 @@ describe('AuthController.login', () => {
 
         const data = res._getJSONData()
         expect(res.statusCode).toBe(404)
-        expect(data).toEqual({error: 'Usuario no encontrado'})
+        expect(data).toEqual({error: 'usuario no encontrado'})
     })
 
     it('should return 403 if the account has not been confirmed', async () => {
@@ -117,7 +122,7 @@ describe('AuthController.login', () => {
 
         const data = res._getJSONData()
         expect(res.statusCode).toBe(403)
-        expect(data).toEqual({error: 'La Cuenta no ha sido confirmada'})
+        expect(data).toEqual({error: 'La cuenta no ha sido confirmada'})
     })
 
     it('should return 401 if the password is incorrect', async () => {
@@ -145,7 +150,7 @@ describe('AuthController.login', () => {
 
         const data = res._getJSONData()
         expect(res.statusCode).toBe(401)
-        expect(data).toEqual({error: 'Password Incorrecto'})
+        expect(data).toEqual({error: 'Contraseña incorrecta'})
         expect(checkPassword).toHaveBeenCalledWith(req.body.password, userMock.password)
         expect(checkPassword).toHaveBeenCalledTimes(1)
     })

@@ -1,0 +1,416 @@
+
+> cashtrackr_backend@1.0.0 test
+> jest src/tests/integration/app.test.ts
+
+  console.log
+    [dotenv@17.2.2] injecting env (6) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+      at _log (node_modules/dotenv/lib/main.js:139:11)
+
+  console.log
+    [dotenv@17.2.2] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+
+      at _log (node_modules/dotenv/lib/main.js:139:11)
+
+  console.log
+    [dotenv@17.2.2] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+      at _log (node_modules/dotenv/lib/main.js:139:11)
+
+[0mPOST /api/auth/create-account [33m400[0m 11.639 ms - 275[0m
+[0mPOST /api/auth/create-account [33m400[0m 0.841 ms - 113[0m
+[0mPOST /api/auth/create-account [33m400[0m 1.451 ms - 134[0m
+  console.log
+    [34m[1mBase de datos conectada[22m[39m
+
+      at connectDB (src/server.ts:15:17)
+
+[0mPOST /api/auth/create-account [33m409[0m 1417.699 ms - 47[0m
+[0mPOST /api/auth/create-account [33m409[0m 76.974 ms - 47[0m
+[0mPOST /api/auth/confirm-account [33m400[0m 1.311 ms - 106[0m
+[0mPOST /api/auth/confirm-account [33m401[0m 78.128 ms - 27[0m
+[0mPOST /api/auth/confirm-account [33m400[0m 1.001 ms - 158[0m
+[0mPOST /api/auth/login [33m400[0m 1.079 ms - 178[0m
+[0mPOST /api/auth/login [33m400[0m 0.595 ms - 107[0m
+[0mPOST /api/auth/login [33m404[0m 76.671 ms - 33[0m
+[0mPOST /api/auth/login [33m403[0m 1.728 ms - 43[0m
+[0mPOST /api/auth/create-account [33m409[0m 0.912 ms - 47[0m
+[0mPOST /api/auth/login [33m403[0m 0.693 ms - 43[0m
+[0mPOST /api/auth/login [33m401[0m 0.478 ms - 34[0m
+[0mPOST /api/auth/login [32m200[0m 0.470 ms - 11[0m
+[0mPOST /api/auth/login [33m403[0m 78.581 ms - 43[0m
+[0mPOST /api/auth/login [33m403[0m 77.186 ms - 43[0m
+[0mPOST /api/auth/login [33m403[0m 76.540 ms - 43[0m
+[0mPOST /api/auth/login [33m403[0m 76.393 ms - 43[0m
+[0mPOST /api/auth/login [33m403[0m 77.868 ms - 43[0m
+FAIL src/tests/integration/app.test.ts
+  Authentication - Create Account
+    √ should display validation errors when form is empty (31 ms)
+    √ should return 400 status code when the email is invalid (5 ms)
+    √ should return 400 status code when the password is less than 8 characters (4 ms)
+    × should register a new user successfully (1424 ms)
+    √ should return 409 conflict when a user is already registered (83 ms)
+  Authentication - Account Confirmation with Token
+    √ should display error if token is empty or token is not valid (8 ms)
+    √ should display error if token doesnt exists (84 ms)
+    × should confirm account with a valid token (6 ms)
+  Authentication - Login
+    √ should display validation errors when the form is empty (5 ms)
+    √ should return 400 bad request when the email is invalid (3 ms)
+    √ should return a 400 error if the user is not found (81 ms)
+    √ should return a 403 error if the user account is not confirmed (7 ms)
+    √ should return a 403 error if the user account is not confirmed (12 ms)
+    √ should return a 401 error if the password is incorrect (3 ms)
+    √ should return a jwt  (3 ms)
+  GET /api/budgets
+    × should reject unauthenticated access to budgets without a jwt
+    × should reject unauthenticated access to budgets without a valid jwt
+    × should allow authenticated access to budgets with a valid jwt
+  POST /api/budgets
+    × should reject unauthenticated post request to budgets without a jwt
+    × should display validation when the form is submitted with invalid data 
+    × should create a new budget and return a success message 
+  GET /api/budgets/:id
+    × should reject unauthenticated get request to budget id without a jwt
+    × should return 400 bad request when id is not valid
+    × should return 404 not found when a budget doesnt exists
+    × should return a single budget by id
+  PUT /api/budgets/:id
+    × should reject unauthenticated put request to budget id without a jwt
+    × should display validation errors if the form is empty
+    × should update a budget by id and return a success message
+  DELETE /api/budgets/:id
+    × should reject unauthenticated put request to budget id without a jwt (1 ms)
+    × should return 404 not found when a budget doesnt exists
+    × should delete a budget and return a success message (1 ms)
+
+  ● Authentication - Create Account › should register a new user successfully
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+    [0m [90m 74 |[39m                             [33m.[39msend(userData)
+     [90m 75 |[39m
+    [31m[1m>[22m[39m[90m 76 |[39m         expect(response[33m.[39mstatus)[33m.[39mtoBe([35m201[39m)
+     [90m    |[39m                                 [31m[1m^[22m[39m
+     [90m 77 |[39m         expect(response[33m.[39mstatus)[33m.[39mnot[33m.[39mtoBe([35m400[39m)
+     [90m 78 |[39m         expect(response[33m.[39mbody)[33m.[39mnot[33m.[39mtoHaveProperty([32m'errors'[39m)
+     [90m 79 |[39m     })[0m
+
+      at Object.<anonymous> (src/tests/integration/app.test.ts:76:33)
+
+  ● Authentication - Account Confirmation with Token › should confirm account with a valid token
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 400
+
+    [0m [90m 137 |[39m                             [33m.[39msend({ token })
+     [90m 138 |[39m         
+    [31m[1m>[22m[39m[90m 139 |[39m         expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                                 [31m[1m^[22m[39m
+     [90m 140 |[39m         expect(response[33m.[39mbody)[33m.[39mtoEqual([32m"Cuenta confirmada con éxito"[39m)
+     [90m 141 |[39m         expect(response[33m.[39mstatus)[33m.[39mnot[33m.[39mtoBe([35m401[39m)
+     [90m 142 |[39m     })[0m
+
+      at Object.<anonymous> (src/tests/integration/app.test.ts:139:33)
+
+  ● GET /api/budgets › should reject unauthenticated access to budgets without a jwt
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:339:9)
+
+  ● GET /api/budgets › should reject unauthenticated access to budgets without a valid jwt
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:339:9)
+
+  ● GET /api/budgets › should allow authenticated access to budgets with a valid jwt
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:339:9)
+
+  ● POST /api/budgets › should reject unauthenticated post request to budgets without a jwt
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:375:9)
+
+  ● POST /api/budgets › should display validation when the form is submitted with invalid data 
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:375:9)
+
+  ● POST /api/budgets › should create a new budget and return a success message 
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:375:9)
+
+  ● GET /api/budgets/:id › should reject unauthenticated get request to budget id without a jwt
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:414:9)
+
+  ● GET /api/budgets/:id › should return 400 bad request when id is not valid
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:414:9)
+
+  ● GET /api/budgets/:id › should return 404 not found when a budget doesnt exists
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:414:9)
+
+  ● GET /api/budgets/:id › should return a single budget by id
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:414:9)
+
+  ● PUT /api/budgets/:id › should reject unauthenticated put request to budget id without a jwt
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:465:9)
+
+  ● PUT /api/budgets/:id › should display validation errors if the form is empty
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:465:9)
+
+  ● PUT /api/budgets/:id › should update a budget by id and return a success message
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:465:9)
+
+  ● DELETE /api/budgets/:id › should reject unauthenticated put request to budget id without a jwt
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:504:9)
+
+  ● DELETE /api/budgets/:id › should return 404 not found when a budget doesnt exists
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:504:9)
+
+  ● DELETE /api/budgets/:id › should delete a budget and return a success message
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 403
+
+    [0m [90m 328 |[39m         })
+     [90m 329 |[39m     jwt [33m=[39m response[33m.[39mbody           
+    [31m[1m>[22m[39m[90m 330 |[39m     expect(response[33m.[39mstatus)[33m.[39mtoBe([35m200[39m)
+     [90m     |[39m                             [31m[1m^[22m[39m
+     [90m 331 |[39m }
+     [90m 332 |[39m
+     [90m 333 |[39m describe([32m'GET /api/budgets'[39m[33m,[39m ()  [33m=>[39m {[0m
+
+      at authenticateUser (src/tests/integration/app.test.ts:330:29)
+      at Object.<anonymous> (src/tests/integration/app.test.ts:504:9)
+
+Test Suites: 1 failed, 1 total
+Tests:       18 failed, 13 passed, 31 total
+Snapshots:   0 total
+Time:        4.201 s, estimated 5 s
+Ran all test suites matching src/tests/integration/app.test.ts.
+Jest did not exit one second after the test run has completed.
+
+'This usually means that there are asynchronous operations that weren't stopped in your tests. Consider running Jest with `--detectOpenHandles` to troubleshoot this issue.

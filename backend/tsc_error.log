@@ -1,0 +1,20 @@
+node_modules/@types/nodemailer/lib/ses-transport/index.d.ts(3,8): error TS1192: Module '"C:/Users/sebas/Dev/cashtrackr/backend/node_modules/@aws-sdk/client-sesv2/dist-types/index"' has no default export.
+src/controller/ExpensesController.ts(8,36): error TS2339: Property 'budget' does not exist on type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
+src/controller/ExpensesController.ts(19,22): error TS2339: Property 'expense' does not exist on type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
+src/controller/ExpensesController.ts(23,19): error TS2339: Property 'expense' does not exist on type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
+src/controller/ExpensesController.ts(28,19): error TS2339: Property 'expense' does not exist on type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
+src/models/Budget.ts(10,5): error TS1206: Decorators are not valid here.
+src/models/Budget.ts(16,5): error TS1206: Decorators are not valid here.
+src/models/Budget.ts(22,5): error TS1206: Decorators are not valid here.
+src/models/Budget.ts(28,5): error TS1206: Decorators are not valid here.
+src/models/Budget.ts(31,5): error TS1206: Decorators are not valid here.
+src/models/Expense.ts(9,5): error TS1206: Decorators are not valid here.
+src/models/Expense.ts(15,5): error TS1206: Decorators are not valid here.
+src/models/Expense.ts(21,5): error TS1206: Decorators are not valid here.
+src/models/Expense.ts(24,5): error TS1206: Decorators are not valid here.
+src/models/User.ts(9,5): error TS1206: Decorators are not valid here.
+src/models/User.ts(15,5): error TS1206: Decorators are not valid here.
+src/models/User.ts(22,5): error TS1206: Decorators are not valid here.
+src/models/User.ts(28,5): error TS1206: Decorators are not valid here.
+src/models/User.ts(33,5): error TS1206: Decorators are not valid here.
+src/models/User.ts(39,5): error TS1206: Decorators are not valid here.

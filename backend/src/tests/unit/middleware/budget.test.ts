@@ -22,7 +22,7 @@ describe('Budget Middleware - validateBudgetExists', () => {
         await validateBudgetExists(req, res, next)
         const data = res._getJSONData()
         expect(res.statusCode).toBe(404)
-        expect(data).toEqual({error: 'Presupuesto no encontrado'})
+        expect(data).toEqual({message: 'No se encontró el presupuesto'})
         expect(next).not.toHaveBeenCalled()
     })
 
@@ -40,7 +40,7 @@ describe('Budget Middleware - validateBudgetExists', () => {
         await validateBudgetExists(req, res, next)
         const data = res._getJSONData()
         expect(res.statusCode).toBe(500)
-        expect(data).toEqual({error: 'Hubo un error'})
+        expect(data).toEqual({message: 'Error al obtener el presupuesto', error: expect.any(Object)})
         expect(next).not.toHaveBeenCalled()
     })
 
@@ -65,7 +65,12 @@ describe('Budget Middleware - validateBudgetExists', () => {
 describe('Budget Middleware - hasAccess', () => {
     it('should call next() if user has access to budget', () => {
         const req = createRequest({
-            budget: budgets[0],
+            budget: {
+                ...budgets[0],
+                user: {
+                    id: 1
+                }
+            },
             user: { id: 1 }
         })
         const res = createResponse()
@@ -78,7 +83,12 @@ describe('Budget Middleware - hasAccess', () => {
 
     it('should return 401 error if userId does not have access to budget', () => {
         const req = createRequest({
-            budget: budgets[0],
+            budget: {
+                ...budgets[0],
+                user: {
+                    id: 1
+                }
+            },
             user: { id: 2 }
         })
         const res = createResponse()
@@ -87,6 +97,6 @@ describe('Budget Middleware - hasAccess', () => {
         hasAccessToBudget(req, res, next)
         expect(next).not.toHaveBeenCalled()
         expect(res.statusCode).toBe(401)
-        expect(res._getJSONData()).toEqual({error: 'Acción no válida'})
+        expect(res._getJSONData()).toEqual({message: 'No tienes acceso a ese presupuesto'})
     })
 })

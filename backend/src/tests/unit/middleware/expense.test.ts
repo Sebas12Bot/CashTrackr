@@ -28,7 +28,7 @@ describe('Expenses Middleware - validateExpenseExists', () => {
 
         const data = res._getJSONData()
         expect(res.statusCode).toBe(404)
-        expect(data).toEqual({error: 'Gasto no encontrado'})
+        expect(data).toEqual({message: 'No se encontró el gasto'})
         expect(next).not.toHaveBeenCalled()
     })
 
@@ -61,14 +61,19 @@ describe('Expenses Middleware - validateExpenseExists', () => {
         const data = res._getJSONData()
         expect(next).not.toHaveBeenCalled()
         expect(res.statusCode).toBe(500)
-        expect(data).toEqual({error: 'Hubo un error'})
+        expect(data).toEqual({message: 'Error al obtener el gasto', error: expect.any(Object)})
     })
     
     it('should prevent unauthorized users from adding expenses', async () => {
         const req = createRequest({
             method: 'POST',
             url: '/api/budgets/:budgetId/expenses',
-            budget: budgets[0],
+            budget: {
+                ...budgets[0],
+                user: {
+                    id: 1
+                }
+            },
             user: { id: 20 },
             body: { name: 'Expense Test', amount: 3000 }
         })
@@ -79,7 +84,8 @@ describe('Expenses Middleware - validateExpenseExists', () => {
 
         const data = res._getJSONData()
         expect(res.statusCode).toBe(401)
-        expect(data).toEqual({error: 'Acción no válida'})
+        expect(res.statusCode).toBe(401)
+        expect(data).toEqual({message: 'No tienes acceso a ese presupuesto'})
         expect(next).not.toHaveBeenCalled()
 
     })

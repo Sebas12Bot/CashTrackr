@@ -11,7 +11,12 @@ dotenv.config()
 async function connectDB() {
     try {
         await db.authenticate()
-        db.sync();
+        // In test environment, reset the database to ensure clean state
+        if (process.env.NODE_ENV === 'test') {
+            await db.sync({ force: true })
+        } else {
+            await db.sync()
+        }
         console.log(colors.blue.bold('Base de datos conectada'))
     } catch (error) {
         console.log(colors.red.bold('Error de conexión a la base de datos: ' + error))

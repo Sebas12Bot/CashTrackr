@@ -1,0 +1,59 @@
+FAIL src/tests/unit/middleware/budget.test.ts
+  Budget Middleware - validateBudgetExists
+    × should handle non-existent budget (6 ms)
+    × should handle internal server error (1 ms)
+    √ should proceed to next middleware if budget exists (1 ms)
+  Budget Middleware - hasAccess
+    √ should call next() if user has access to budget
+    √ should return 401 error if userId does not have access to budget (1 ms)
+
+  ● Budget Middleware - validateBudgetExists › should handle non-existent budget
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "error": "Presupuesto no encontrado",
+    +   "message": "No se encontró el presupuesto",
+      }
+
+    [0m [90m 23 |[39m         [36mconst[39m data [33m=[39m res[33m.[39m_getJSONData()
+     [90m 24 |[39m         expect(res[33m.[39mstatusCode)[33m.[39mtoBe([35m404[39m)
+    [31m[1m>[22m[39m[90m 25 |[39m         expect(data)[33m.[39mtoEqual({error[33m:[39m [32m'Presupuesto no encontrado'[39m})
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 26 |[39m         expect(next)[33m.[39mnot[33m.[39mtoHaveBeenCalled()
+     [90m 27 |[39m     })
+     [90m 28 |[39m[0m
+
+      at Object.<anonymous> (src/tests/unit/middleware/budget.test.ts:25:22)
+
+  ● Budget Middleware - validateBudgetExists › should handle internal server error
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 2
+
+      Object {
+    -   "error": "Hubo un error",
+    +   "error": Object {},
+    +   "message": "Error al obtener el presupuesto",
+      }
+
+    [0m [90m 41 |[39m         [36mconst[39m data [33m=[39m res[33m.[39m_getJSONData()
+     [90m 42 |[39m         expect(res[33m.[39mstatusCode)[33m.[39mtoBe([35m500[39m)
+    [31m[1m>[22m[39m[90m 43 |[39m         expect(data)[33m.[39mtoEqual({error[33m:[39m [32m'Hubo un error'[39m})
+     [90m    |[39m                      [31m[1m^[22m[39m
+     [90m 44 |[39m         expect(next)[33m.[39mnot[33m.[39mtoHaveBeenCalled()
+     [90m 45 |[39m     })
+     [90m 46 |[39m[0m
+
+      at Object.<anonymous> (src/tests/unit/middleware/budget.test.ts:43:22)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 3 passed, 5 total
+Snapshots:   0 total
+Time:        1.696 s, estimated 3 s
+Ran all test suites matching src/tests/unit/middleware/budget.test.ts.

@@ -14,8 +14,7 @@ export class BudgetController {
             res.status(200).json(budgets)
         } catch (error) {
             res.status(500).json({
-                message: 'Error al obtener todos los presupuestos',
-                error: error,
+                error: 'Hubo un error',
             })
         }
     }
@@ -28,8 +27,7 @@ export class BudgetController {
             res.status(201).json('Presupuesto creado con éxito')
         } catch (error) {
             res.status(500).json({
-                message: 'Error al crear el budget',
-                error: error,
+                error: 'Hubo un error',
             })
         }
     }

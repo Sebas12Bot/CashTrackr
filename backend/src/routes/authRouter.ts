@@ -7,7 +7,10 @@ import { authenticate } from '../middleware/auth'
 
 const router = Router()
 
-router.use(limiter)
+// Only apply rate limiting in production/development, not in tests
+if (process.env.NODE_ENV !== 'test') {
+    router.use(limiter)
+}
 
 router.post('/create-account', 
     body('name')

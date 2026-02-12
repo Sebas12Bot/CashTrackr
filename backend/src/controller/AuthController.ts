@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 import User from '../models/User'
-import { error } from 'console'
+
 import { checkPassword, hashPassword } from '../utils/auth'
 import { generateToken } from '../utils/token'
 import { AuthEmail } from '../emails/AuthEmail'
@@ -15,8 +15,7 @@ export class AuthController {
         const userExists = await User.findOne({ where: { email } })
         if (userExists) {
             return res.status(409).json({
-                message: 'Un usuario con ese correo ya existe',
-                error: error
+                error: 'Un usuario con ese correo ya existe'
             })
         }
 
@@ -35,8 +34,7 @@ export class AuthController {
             res.status(201).json('Usuario creado con éxito')
         } catch (error) {
             res.status(500).json({
-                message: 'Error al crear usuario',
-                error: error
+                error: 'Error al crear usuario'
             })
         }
     }
@@ -48,8 +46,7 @@ export class AuthController {
 
         if (!user) {
             return res.status(401).json({
-                message: 'Token inválido',
-                error: error
+                error: 'Token inválido'
             })
         }
 
@@ -67,23 +64,20 @@ export class AuthController {
 
         if (!user) {
             return res.status(404).json({
-                message: 'usuario no encontrado',
-                error: error
+                error: 'usuario no encontrado'
             })
         }
 
         if (!user.confirmed) {
             return res.status(403).json({
-                message: 'La cuenta no ha sido confirmada',
-                error: error
+                error: 'La cuenta no ha sido confirmada'
             })
         }
 
         const isPasswordCorrect = await checkPassword(password, user.password)
         if (!isPasswordCorrect) {
             return res.status(401).json({
-                message: 'Contraseña incorrecta',
-                error: error
+                error: 'Contraseña incorrecta'
             })
         }
 
@@ -99,8 +93,7 @@ export class AuthController {
 
         if (!user) {
             return res.status(404).json({
-                message: 'usuario no encontrado',
-                error: error
+                error: 'usuario no encontrado'
             })
         }
 
@@ -123,8 +116,7 @@ export class AuthController {
 
         if (!tokenExists) {
             return res.status(404).json({
-                message: 'Token no encontrado',
-                error: error
+                error: 'Token no encontrado'
             })
         }
 
@@ -139,8 +131,7 @@ export class AuthController {
 
         if (!user) {
             return res.status(404).json({
-                message: 'Token no encontrado',
-                error: error
+                error: 'Token no encontrado'
             })
         }
 
@@ -165,8 +156,7 @@ export class AuthController {
         const isPasswordCorrect = await checkPassword(current_password, user.password)
         if (!isPasswordCorrect) {
             return res.status(401).json({
-                message: 'La contraseña actual es incorrecta',
-                error: error
+                error: 'La contraseña actual es incorrecta'
             })
         }
 
@@ -186,8 +176,7 @@ export class AuthController {
         const isPasswordCorrect = await checkPassword(password, user.password)
         if (!isPasswordCorrect) {
             return res.status(401).json({
-                message: 'La contraseña actual es incorrecta',
-                error: error
+                error: 'La contraseña actual es incorrecta'
             })
         }
         
